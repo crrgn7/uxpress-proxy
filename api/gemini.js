@@ -43,7 +43,7 @@ export default async function handler(req, res) {
   if (!apiKey) return res.status(500).json({ error: 'Proxy not configured' });
 
   const { model, payload } = req.body ?? {};
-  if (!model || typeof model !== 'string' || !payload || typeof payload !== 'object') {
+  if (!model || typeof model !== 'string' || !payload || typeof payload !== 'object' || Array.isArray(payload)) {
     return res.status(400).json({ error: 'model (string) and payload (object) required' });
   }
 
@@ -69,6 +69,12 @@ export default async function handler(req, res) {
     data = await geminiRes.json();
   } catch {
     return res.status(502).json({ error: 'Gemini returned non-JSON', status: geminiRes.status });
+  }
+
+  // Remap Gemini's 401 to 502 so the plugin doesn't misinterpret an expired proxy API key
+  // as a rejected site token and wipe its registration.
+  if (geminiRes.status === 401) {
+    return res.status(502).json({ error: 'Upstream authentication failed — check proxy API key', upstream_status: 401 });
   }
 
   res.status(geminiRes.status).json(data);
