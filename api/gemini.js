@@ -19,7 +19,8 @@ function isValidToken(token) {
 
   const expected = createHmac('sha256', secret).update(canonical).digest('hex');
 
-  const a = Buffer.from(parts[1].padEnd(64, '0'), 'hex');
+  if (parts[1].length !== 64) return false;
+  const a = Buffer.from(parts[1], 'hex');
   const b = Buffer.from(expected, 'hex');
   if (a.length !== b.length) return false;
   return timingSafeEqual(a, b);
