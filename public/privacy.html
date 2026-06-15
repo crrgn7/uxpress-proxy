@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — UXPress</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.7; color: #1a1a2e; background: #f9f9fb; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+    header { margin-bottom: 48px; }
+    header a { color: #4f46e5; text-decoration: none; font-size: 14px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-top: 12px; margin-bottom: 8px; }
+    .meta { color: #6b7280; font-size: 14px; margin-bottom: 0; }
+    h2 { font-size: 1.15rem; font-weight: 600; margin-top: 40px; margin-bottom: 10px; color: #111827; }
+    p { margin-bottom: 14px; color: #374151; }
+    ul { margin: 0 0 14px 20px; color: #374151; }
+    ul li { margin-bottom: 6px; }
+    a { color: #4f46e5; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 24px 28px; margin-top: 8px; }
+    .tag { display: inline-block; font-size: 12px; font-weight: 600; background: #ede9fe; color: #6d28d9; border-radius: 4px; padding: 2px 8px; margin-bottom: 10px; letter-spacing: .04em; text-transform: uppercase; }
+    footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid #e5e7eb; font-size: 13px; color: #9ca3af; }
+    footer a { color: #6b7280; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="/">← uxpress-proxy.vercel.app</a>
+    <h1>Privacy Policy</h1>
+    <p class="meta">UXPress Proxy &mdash; Last updated 15 June 2026</p>
+  </header>
+
+  <p>This policy explains what data is handled by the UXPress Proxy service at <strong>uxpress-proxy.vercel.app</strong> and how it is used. The UXPress WordPress plugin sends data through this proxy to provide AI-assisted UX review features.</p>
+
+  <h2>1. Proxy registration</h2>
+  <div class="card">
+    <span class="tag">Admin-triggered</span>
+    <p>When a WordPress site administrator connects their account through the Freemius opt-in flow, the UXPress plugin sends a one-time registration request to this proxy containing:</p>
+    <ul>
+      <li>The WordPress site URL (normalized to origin only)</li>
+      <li>A Freemius install ID (used to verify the site is a legitimate UXPress installation)</li>
+    </ul>
+    <p>The proxy verifies the install ID against the Freemius API using developer credentials stored in Vercel environment variables. On success it returns an HMAC-signed authentication token that is stored in the WordPress database. <strong>No registration occurs before the Freemius opt-in is completed.</strong></p>
+  </div>
+
+  <h2>2. Deep Review (AI analysis)</h2>
+  <div class="card">
+    <span class="tag">Editor-triggered</span>
+    <p>When a logged-in editor explicitly clicks <em>Run AI Review</em> in the Gutenberg sidebar, the plugin sends the following data through this proxy to Google Gemini:</p>
+    <ul>
+      <li>Page text content and block structure of the currently open page</li>
+      <li>A screenshot of the Gutenberg editor canvas</li>
+      <li>The site authentication token (to verify the request is from a registered site)</li>
+      <li>Relevant page metadata (page type, score context)</li>
+    </ul>
+    <p><strong>UXPress does not intentionally store Deep Review payloads on this proxy after the request completes.</strong> The proxy relays the request to Google Gemini and returns the response.</p>
+    <p>Data processed by Google Gemini is subject to Google's applicable terms and privacy policies: <a href="https://cloud.google.com/terms/cloud-privacy-notice" target="_blank" rel="noopener noreferrer">Google Cloud Privacy Notice</a> &mdash; <a href="https://cloud.google.com/terms/" target="_blank" rel="noopener noreferrer">Google Cloud Terms of Service</a>.</p>
+    <p><strong>Please do not submit pages containing sensitive, confidential, or regulated personal data</strong> (health records, financial information, personal identifiers of third parties, etc.) to Deep Review.</p>
+  </div>
+
+  <h2>3. What is not collected</h2>
+  <div class="card">
+    <ul>
+      <li>No payment card data</li>
+      <li>No form field values or form submission contents</li>
+      <li>No visitor personal data (names, emails, IP addresses of your site's visitors)</li>
+      <li>No cookies are set by this proxy</li>
+    </ul>
+  </div>
+
+  <h2>4. Visitor friction and performance signals</h2>
+  <div class="card">
+    <p>On Pro plans, the UXPress plugin may collect aggregate visitor friction signals (Core Web Vitals, rage clicks, scroll depth, form abandonment flags) directly to your WordPress installation via the REST API. <strong>These signals are stored locally in your WordPress database and are not transmitted through this proxy or to any external service.</strong></p>
+  </div>
+
+  <h2>5. Freemius (licensing and accounts)</h2>
+  <div class="card">
+    <p>UXPress uses Freemius for software licensing, subscription management, checkout, account connection, plan entitlement checks, and plugin updates. Freemius operates independently of this proxy. See <a href="https://freemius.com/privacy/" target="_blank" rel="noopener noreferrer">Freemius Privacy Policy</a> and <a href="https://freemius.com/terms/" target="_blank" rel="noopener noreferrer">Freemius Terms of Service</a>.</p>
+  </div>
+
+  <h2>6. Infrastructure</h2>
+  <div class="card">
+    <p>This proxy is hosted on Vercel (Vercel Inc., USA). Request logs may be retained by Vercel for operational purposes per <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel's Privacy Policy</a>. The proxy itself does not write request payloads to any persistent storage.</p>
+  </div>
+
+  <h2>7. Contact</h2>
+  <p>For privacy questions or data requests: <a href="mailto:uxpress.support@gmail.com">uxpress.support@gmail.com</a></p>
+
+  <footer>
+    <p><a href="/terms">Terms of Service</a> &mdash; <a href="/privacy">Privacy Policy</a> &mdash; UXPress &copy; 2026</p>
+  </footer>
+</div>
+</body>
+</html>
