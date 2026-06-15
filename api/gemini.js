@@ -47,6 +47,17 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'model (string) and payload (object) required' });
   }
 
+  const ALLOWED_MODELS = [
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
+    'gemini-1.5-pro',
+  ];
+  if (!ALLOWED_MODELS.includes(model)) {
+    return res.status(400).json({ error: 'Unsupported model.' });
+  }
+
   let geminiRes;
   try {
     geminiRes = await fetch(
